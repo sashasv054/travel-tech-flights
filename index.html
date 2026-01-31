@@ -6,26 +6,21 @@
     <title>Fly Smart - מנוע חיפוש חכם</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Assistant', sans-serif; }
-    </style>
+    <style>body { font-family: 'Assistant', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900">
     <div class="max-w-5xl mx-auto p-4 md:p-10">
-        
         <header class="mb-12 text-center">
-            <h1 class="text-6xl font-black text-blue-600 mb-2 italic tracking-tighter">FLY SMART</h1>
-            <p class="text-slate-500 font-bold italic text-lg">הסטארט-אפ של סשה וענבל • חכם, מהיר, זול</p>
+            <h1 class="text-6xl font-black text-blue-600 mb-2 italic tracking-tighter text-center">FLY SMART</h1>
+            <p class="text-slate-500 font-bold italic text-lg text-center">הסטארט-אפ של סשה וענבל • חכם, מהיר, זול</p>
         </header>
 
         <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl mb-12 border border-slate-100">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
                 <div>
                     <label class="block text-sm font-bold text-blue-600 mb-2 uppercase italic">לאן טסים? (קוד IATA)</label>
                     <input type="text" id="destination" placeholder="למשל: TLV" maxlength="3" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 outline-none transition-all font-black text-xl uppercase">
                 </div>
-
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2 uppercase">אזור מוצא</label>
                     <select id="region" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 outline-none transition-all">
@@ -38,31 +33,28 @@
                         <option value="All World">כל העולם</option>
                     </select>
                 </div>
-
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2 uppercase">תאריך יציאה</label>
                     <input type="date" id="date" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 outline-none transition-all">
                 </div>
-
                 <div class="lg:col-span-3 grid grid-cols-4 gap-4 border-t pt-6 items-center">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">מבוגרים</label>
-                        <input type="number" id="adults" value="1" min="1" class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none font-bold">
+                        <input type="number" id="adults" value="1" min="1" class="w-full p-3 border rounded-xl bg-slate-50 font-bold">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1 text-blue-400">ילדים (2-12)</label>
-                        <input type="number" id="children" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none font-bold">
+                        <label class="block text-xs font-bold text-slate-400 mb-1 text-blue-400">ילדים</label>
+                        <input type="number" id="children" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50 font-bold">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1 text-green-400">תינוקות (0-2)</label>
-                        <input type="number" id="infants" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none font-bold">
+                        <label class="block text-xs font-bold text-slate-400 mb-1 text-green-400">תינוקות</label>
+                        <input type="number" id="infants" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50 font-bold">
                     </div>
                     <div class="flex items-center gap-2 pt-4">
                         <input type="checkbox" id="nonStop" class="w-6 h-6 rounded-lg text-blue-600 border-slate-300">
                         <label for="nonStop" class="font-bold text-slate-700 cursor-pointer text-sm uppercase">רק ישיר</label>
                     </div>
                 </div>
-
                 <button onclick="searchFlights()" id="searchBtn" class="lg:col-span-3 w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 transition-all shadow-xl text-2xl uppercase italic active:scale-95">
                     SEARCH FLIGHTS 🚀
                 </button>
@@ -70,13 +62,9 @@
         </div>
 
         <div id="results-area">
-            <h2 class="text-2xl font-black mb-6 text-slate-800 flex items-center gap-2">
-                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                תוצאות החיפוש החכם
-            </h2>
             <div id="flight-list" class="grid gap-6">
-                <div class="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400 font-bold">
-                    הזינו יעד ותאריך והמנוע יתחיל לסרוק את האזור...
+                <div class="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400 font-bold italic">
+                    המנוע מחכה לפקודה שלכם...
                 </div>
             </div>
         </div>
@@ -86,7 +74,7 @@
         import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
         const SUPABASE_URL = 'https://gltwltqldfoksylzayvs.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdHdsdHFsZGZva3N5bHpheXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjMwMDQsImV4cCI6MjA4NTQzOTAwNH0.rUc35I9GXDrltm6FxOwmqB54Y3lOBseda1AYm-WOHAo';
+        const SUPABASE_KEY = 'sb_publishable_cuF14kK1aF-DAduO-r1DPg_CGjpZbuT'; // המפתח שביקשת
         const EDGE_URL = 'https://gltwltqldfoksylzayvs.supabase.co/functions/v1/search-flights'; 
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -111,25 +99,31 @@
             if (!payload.departure_date) return alert("בבקשה תבחר תאריך טיסה");
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="animate-pulse tracking-widest italic">SCANNING SKIES...</span>`;
-            list.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div><p class="font-bold text-blue-900">מחפשים במקביל בכל שדות התעופה באזור...<br>זה עשוי לקחת כמה שניות.</p></div>`;
+            btn.innerHTML = `<span class="animate-pulse tracking-widest italic">AUTHENTICATING & SCANNING...</span>`;
+            list.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div><p class="font-bold text-blue-900 italic text-center">מחפשים במקביל בכל שדות התעופה באזור...</p></div>`;
 
             try {
                 const res = await fetch(EDGE_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_KEY}` // תיקון שגיאת 401
+                    },
                     body: JSON.stringify(payload)
                 });
+                
+                if (!res.ok) throw new Error(`Server returned ${res.status}`);
                 
                 const data = await res.json();
                 
                 if (data && data.length > 0) {
                     renderResults(data);
                 } else {
-                    list.innerHTML = `<div class="bg-white p-10 rounded-[2rem] text-center shadow font-bold text-slate-400">לא נמצאו טיסות תואמות. נסה אזור או תאריך אחר.</div>`;
+                    list.innerHTML = `<div class="bg-white p-10 rounded-[2rem] text-center shadow font-bold text-slate-400 italic">לא נמצאו טיסות תואמות בתאריך זה בגרסת ה-Test.</div>`;
                 }
             } catch (e) {
-                alert("שגיאה בחיבור למנוע. וודא שה-Edge Function מופעלת.");
+                alert("שגיאת הרשאה או חיבור. וודא שהמפתח תקין וה-Deploy הושלם.");
+                console.error(e);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "SEARCH FLIGHTS 🚀";
@@ -141,19 +135,15 @@
             list.innerHTML = flights.map(f => `
                 <div class="bg-white p-8 rounded-3xl shadow-lg flex flex-col md:flex-row items-center justify-between border-r-[12px] border-blue-600 hover:scale-[1.01] transition-transform duration-300">
                     <div class="flex items-center gap-8">
-                        <div class="bg-slate-50 p-4 rounded-2xl shadow-inner">
-                            <img src="https://www.gstatic.com/flights/airline_logos/70px/${f.airline}.png" 
-                                 class="w-16 h-16 object-contain" 
-                                 onerror="this.src='https://via.placeholder.com/64?text=✈️'">
-                        </div>
+                        <img src="https://www.gstatic.com/flights/airline_logos/70px/${f.airline}.png" class="w-16 h-16 object-contain" onerror="this.src='https://via.placeholder.com/64?text=✈️'">
                         <div>
-                            <div class="text-4xl font-black text-slate-800 tracking-tighter">${f.origin_code} <span class="text-blue-500 font-normal">➔</span> ${f.destination_code}</div>
-                            <div class="text-slate-400 font-bold text-lg mt-1 underline decoration-blue-200">${f.departure_date} • ${f.is_nonstop ? 'טיסה ישירה' : 'כולל עצירה'}</div>
+                            <div class="text-4xl font-black text-slate-800 tracking-tighter">${f.origin_code} ➔ ${f.destination_code}</div>
+                            <div class="text-slate-400 font-bold text-lg mt-1 italic uppercase">${f.departure_date} • ${f.is_nonstop ? 'Direct' : 'Connect'}</div>
                         </div>
                     </div>
                     <div class="text-center md:text-left mt-6 md:mt-0">
                         <div class="text-5xl font-black text-blue-600 leading-none">${f.price} ${f.currency}</div>
-                        <p class="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase mt-2">Total for all travelers</p>
+                        <p class="text-[10px] font-black text-slate-300 tracking-[0.2em] uppercase mt-2">Total Price</p>
                     </div>
                 </div>
             `).join('');
