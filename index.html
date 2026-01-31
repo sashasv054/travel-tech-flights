@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>איפה הכסף - חיפוש טיסות</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8 font-sans">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-extrabold text-blue-900 mb-2">איפה הכסף? ✈️</h1>
+            <p class="text-lg text-gray-600">הטיסות הכי משתלמות שמצאנו עבורכם</p>
+        </header>
+
+        <div id="flight-list" class="grid gap-6">
+            <div class="text-center py-10">
+                <div class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-blue-600 rounded-full" role="status"></div>
+                <p class="mt-2 text-gray-500">מושך נתונים מהמערכת...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+        const SUPABASE_URL = 'https://gltwltqldfoksylzayvs.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdHdsdHFsZGZva3N5bHpheXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjMwMDQsImV4cCI6MjA4NTQzOTAwNH0.rUc35I9GXDrltm6FxOwmqB54Y3lOBseda1AYm-WOHAo';
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function loadFlights() {
+            const { data: flights, error } = await supabase
+                .from('flight_cache')
+                .select('*')
+                .order('price', { ascending: true });
+
+            const listElement = document.getElementById('flight-list');
+            
+            if (error) {
+                console.error(error);
+                listElement.innerHTML = `<p class="text-red-500 text-center text-xl font-bold">שגיאה בחיבור לנתונים. כנראה שצריך להפעיל RLS ב-Supabase.</p>`;
+                return;
+            }
+
+            if (!flights || flights.length === 0) {
+                listElement.innerHTML = `<div class="bg-white p-8 rounded-2xl text-center shadow">לא נמצאו טיסות בטבלה. תריץ חיפוש ב-Edge Function!</div>`;
+                return;
+            }
+
+            listElement.innerHTML = flights.map(flight => `
+                <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between border-r-8 border-blue-600 hover:shadow-xl transition-shadow">
+                    <div class="flex items-center gap-6">
+                        <div class="bg-gray-50 p-3 rounded-full">
+                            <img src="https://www.gstatic.com/flights/airline_logos/70px/${flight.airline}.png" 
+                                 onerror="this.src='https://via.placeholder.com/50?text=✈️'"
+                                 class="w-12 h-12 object-contain">
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 font-black text-2xl text-gray-800">
+                                <span>${flight.origin_code}</span>
+                                <span class="text-blue-500 font-normal">➔</span>
+                                <span>${flight.destination_code}</span>
+                            </div>
+                            <p class="text-gray-500">📅 ${flight.departure_date} • ${flight.is_nonstop ? 'ישירה' : 'קונקשן'}</p>
+                        </div>
+                    </div>
+                    <div class="text-center md:text-left mt-4 md:mt-0">
+                        <div class="text-3xl font-black text-blue-700">${flight.price} ${flight.currency}</div>
+                        <button class="bg-blue-600 text-white font-bold px-8 py-2 rounded-xl mt-2 hover:bg-blue-700 transition-all">
+                            הזמן עכשיו
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadFlights();
+    </script>
+</body>
+</html>
