@@ -3,74 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fly Smart - מנוע חיפוש טיסות חכם</title>
+    <title>Fly Smart - מנוע חיפוש חכם</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Assistant', sans-serif; }
-    </style>
+    <style>body { font-family: 'Assistant', sans-serif; }</style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-900">
+<body class="bg-slate-50 min-h-screen text-slate-900">
     <div class="max-w-5xl mx-auto p-4 md:p-10">
         
         <header class="mb-12 text-center">
-            <h1 class="text-5xl font-extrabold text-blue-600 tracking-tight mb-3">FLY SMART <span class="text-slate-400 font-light">|</span> ✈️</h1>
-            <p class="text-xl text-slate-500 font-medium text-center">הטכנולוגיה של סשה וענבל למציאת הטיסה המושלמת</p>
+            <h1 class="text-5xl font-extrabold text-blue-600 mb-2 italic">FLY SMART</h1>
+            <p class="text-slate-500 font-medium italic">הסטארט-אפ של סשה וענבל • חכם, מהיר, זול</p>
         </header>
 
-        <div class="bg-white p-8 rounded-[2rem] shadow-2xl mb-12 border border-slate-100">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl mb-12 border border-slate-100">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">מאיזה אזור יוצאים?</label>
-                    <select id="region" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all">
-                        <option value="Eastern Europe">מזרח אירופה (פולין, צ'כיה וכו')</option>
-                        <option value="Western Europe">מערב אירופה (צרפת, גרמניה וכו')</option>
-                        <option value="All World">כל העולם (חיפוש גלובלי)</option>
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">אזור מוצא</label>
+                    <select id="region" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 outline-none transition-all">
+                        <option value="Eastern Europe">מזרח אירופה</option>
+                        <option value="Western Europe">מערב אירופה</option>
+                        <option value="Central Europe">מרכז אירופה</option>
+                        <option value="Southern Europe">דרום אירופה</option>
+                        <option value="Northern Europe">צפון אירופה</option>
+                        <option value="Middle East">מזרח תיכון</option>
+                        <option value="All World">כל העולם</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">מתי טסים?</label>
-                    <input type="date" id="date" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all">
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">תאריך יציאה</label>
+                    <input type="date" id="date" class="w-full p-4 border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-500 outline-none transition-all">
                 </div>
 
-                <div class="flex items-center gap-3 pt-8 md:pt-10">
-                    <input type="checkbox" id="nonStop" class="w-6 h-6 rounded-lg text-blue-600 focus:ring-blue-500 border-slate-300">
+                <div class="flex items-center gap-3 pt-8">
+                    <input type="checkbox" id="nonStop" class="w-6 h-6 rounded-lg text-blue-600 border-slate-300">
                     <label for="nonStop" class="font-bold text-slate-700 cursor-pointer">טיסות ישירות בלבד</label>
                 </div>
 
-                <div class="lg:col-span-3 grid grid-cols-3 gap-4 border-t border-slate-100 pt-6">
+                <div class="lg:col-span-3 grid grid-cols-3 gap-4 border-t pt-6">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">מבוגרים</label>
                         <input type="number" id="adults" value="2" min="1" class="w-full p-3 border rounded-xl bg-slate-50">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">ילדים (2-12)</label>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">ילדים</label>
                         <input type="number" id="children" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">תינוקות (0-2)</label>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">תינוקות</label>
                         <input type="number" id="infants" value="0" min="0" class="w-full p-3 border rounded-xl bg-slate-50">
                     </div>
                 </div>
 
-                <div class="lg:col-span-3">
-                    <button onclick="searchFlights()" id="searchBtn" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 transition-all shadow-xl hover:shadow-blue-200 transform hover:-translate-y-1 active:scale-95 text-xl">
-                        מצאו לי טיסות זולות 🚀
-                    </button>
-                </div>
+                <button onclick="searchFlights()" id="searchBtn" class="lg:col-span-3 w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 transition-all shadow-xl text-xl uppercase italic">
+                    Search Flights 🚀
+                </button>
             </div>
         </div>
 
-        <div id="results-container">
-            <h2 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-2">
-                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                תוצאות החיפוש
-            </h2>
+        <div id="results-area">
+            <h2 class="text-2xl font-black mb-6 text-slate-800">תוצאות החיפוש החכם שלכם:</h2>
             <div id="flight-list" class="grid gap-6">
-                <div class="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200">
-                    <p class="text-slate-400 text-lg">עדיין לא בוצע חיפוש. בחרו פרטים ולחצו על הכפתור למעלה.</p>
+                <div class="text-center py-20 bg-white rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400">
+                    המנוע מחכה לפקודה שלכם...
                 </div>
             </div>
         </div>
@@ -81,7 +78,7 @@
 
         const SUPABASE_URL = 'https://gltwltqldfoksylzayvs.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdHdsdHFsZGZva3N5bHpheXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NjMwMDQsImV4cCI6MjA4NTQzOTAwNH0.rUc35I9GXDrltm6FxOwmqB54Y3lOBseda1AYm-WOHAo';
-        const EDGE_FUNCTION_URL = 'https://gltwltqldfoksylzayvs.supabase.co/functions/v1/search-flights'; 
+        const EDGE_URL = 'https://gltwltqldfoksylzayvs.supabase.co/functions/v1/search-flights'; 
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -89,8 +86,7 @@
             const btn = document.getElementById('searchBtn');
             const list = document.getElementById('flight-list');
             
-            // איסוף נתונים מהטופס
-            const searchData = {
+            const payload = {
                 region_name: document.getElementById('region').value,
                 destination_home: 'TLV',
                 departure_date: document.getElementById('date').value,
@@ -100,80 +96,47 @@
                 nonStop: document.getElementById('nonStop').checked
             };
 
-            if (!searchData.departure_date) {
-                alert("בבקשה תבחר תאריך טיסה");
-                return;
-            }
+            if (!payload.departure_date) return alert("בחרו תאריך!");
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="animate-pulse">מחפש במיליוני טיסות...</span>`;
-            list.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full"></div><p class="mt-4 text-slate-500 font-bold">סורקים את השמיים עבורכם...</p></div>`;
+            btn.innerHTML = `<span class="animate-pulse">סורק שמיים...</span>`;
+            list.innerHTML = `<div class="text-center py-20"><div class="animate-spin inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full"></div></div>`;
 
             try {
-                // קריאה ל-Edge Function
-                const response = await fetch(EDGE_FUNCTION_URL, {
+                const res = await fetch(EDGE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(searchData)
+                    body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) throw new Error('Search failed');
-
-                // שליפת התוצאות המעודכנות מה-DB
-                await loadResults();
+                
+                if (res.ok) await renderResults();
             } catch (e) {
-                alert("משהו השתבש בחיפוש. וודא שה-Edge Function מופעלת.");
-                console.error(e);
+                alert("שגיאה בחיבור למנוע.");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "מצאו לי טיסות זולות 🚀";
+                btn.innerText = "Search Flights 🚀";
             }
         };
 
-        async function loadResults() {
-            const { data: flights, error } = await supabase
-                .from('flight_cache')
-                .select('*')
-                .order('price', { ascending: true })
-                .limit(20);
-
+        async function renderResults() {
+            const { data: flights } = await supabase.from('flight_cache').select('*').order('price', { ascending: true });
             const list = document.getElementById('flight-list');
             
-            if (!flights || flights.length === 0) {
-                list.innerHTML = `<div class="bg-white p-10 rounded-[2rem] text-center shadow">לא נמצאו טיסות לתאריך ולאזור שנבחרו.</div>`;
-                return;
-            }
-
-            list.innerHTML = flights.map(flight => `
-                <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between border-r-8 border-blue-600 hover:shadow-xl transition-all duration-300">
+            list.innerHTML = flights.length ? flights.map(f => `
+                <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between border-r-8 border-blue-600">
                     <div class="flex items-center gap-6">
-                        <div class="bg-slate-50 p-4 rounded-2xl shadow-inner">
-                            <img src="https://www.gstatic.com/flights/airline_logos/70px/${flight.airline}.png" 
-                                 class="w-14 h-14 object-contain" 
-                                 onerror="this.src='https://via.placeholder.com/56?text=✈️'">
-                        </div>
+                        <img src="https://www.gstatic.com/flights/airline_logos/70px/${f.airline}.png" class="w-14 h-14 object-contain">
                         <div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-black text-3xl text-slate-800">${flight.origin_code}</span>
-                                <span class="text-blue-500 text-2xl">➔</span>
-                                <span class="font-black text-3xl text-slate-800">${flight.destination_code}</span>
-                            </div>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">${flight.airline}</span>
-                                <span class="text-slate-400 text-sm">📅 ${flight.departure_date}</span>
-                                <span class="${flight.is_nonstop ? 'text-green-600' : 'text-orange-500'} text-sm font-bold">• ${flight.is_nonstop ? 'טיסה ישירה' : 'קונקשן'}</span>
-                            </div>
+                            <div class="text-3xl font-black">${f.origin_code} ➔ ${f.destination_code}</div>
+                            <div class="text-slate-400 font-bold">${f.departure_date} • ${f.is_nonstop ? 'ישירה' : 'קונקשן'}</div>
                         </div>
                     </div>
-                    <div class="text-center md:text-left mt-6 md:mt-0 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0">
-                        <div class="text-4xl font-black text-blue-600 leading-none">${flight.price} ${flight.currency}</div>
-                        <p class="text-xs text-slate-400 font-bold mt-1 mb-4">מחיר סופי לכל הקבוצה</p>
-                        <button class="w-full md:w-auto bg-slate-900 text-white font-bold px-10 py-3 rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-slate-200">
-                            צפייה בטיסה
-                        </button>
+                    <div class="text-center md:text-left mt-4 md:mt-0">
+                        <div class="text-4xl font-black text-blue-600">${f.price} ${f.currency}</div>
+                        <p class="text-[10px] uppercase font-bold text-slate-300">סה"כ לכל הקבוצה</p>
                     </div>
                 </div>
-            `).join('');
+            `).join('') : '<div class="text-center">לא נמצאו תוצאות.</div>';
         }
     </script>
 </body>
