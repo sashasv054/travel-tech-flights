@@ -6,48 +6,59 @@
   const EDGE_URL = "https://gltwltqldfoksylzayvs.supabase.co/functions/v1/search-flights";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: false,
-    },
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
   });
 
   async function ensureJwt() {
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (sessionData?.session?.access_token) return sessionData.session.access_token;
+    const { data: s1, error: e1 } = await supabase.auth.getSession();
+    if (e1) throw new Error(e1.message);
+    if (s1?.session?.access_token) return s1.session.access_token;
 
-    const { data, error } = await supabase.auth.signInAnonymously();
-    if (error) throw new Error(error.message);
-    if (!data?.session?.access_token) throw new Error("Failed to obtain access token");
-    return data.session.access_token;
+    const { data: s2, error: e2 } = await supabase.auth.signInAnonymously();
+    if (e2) throw new Error(e2.message);
+    if (!s2?.session?.access_token) throw new Error("No access token returned");
+    return s2.session.access_token;
   }
 
-  function getInt(id, fallback = 0) {
-    const v = Number(document.getElementById(id)?.value ?? fallback);
-    return Number.isFinite(v) ? Math.trunc(v) : fallback;
+  function getEl(id) {
+    const el = document.getElementById(id);
+    if (!el) throw new Error(`Missing element with id="${id}"`);
+    return el;
   }
 
-  window.searchFlights = async () => {
-    const payload = {
-      region_name: String(document.getElementById("region").value || "").trim(),
-      destination_home: String(document.getElementById("destination").value || "").trim().toUpperCase(),
-      departure_date: String(document.getElementById("date").value || "").trim(),
-      adults: Math.max(1, getInt("adults", 1)),
-      children: Math.max(0, getInt("children", 0)),
-      infants: Math.max(0, getInt("infants", 0)),
-      nonStop: Boolean(document.getElementById("nonStop").checked),
-    };
+  function safeRender(data) {
+    if (typeof window.renderResults === "function") {
+      window.renderResults(data);
+      return;
+    }
+    console.log("renderResults(data):", data);
+  }
 
+  function toInt(value, fallback) {
+    const n = Number(value);
+    return Number.isFinite(n) ? Math.trunc(n) : fallback;
+  }
+
+  async function searchFlights() {
     try {
-      const accessToken = await ensureJwt();
+      const payload = {
+        region_name: String(getEl("region").value || "").trim(),
+        destination_home: String(getEl("destination").value || "").trim().toUpperCase(),
+        departure_date: String(getEl("date").value || "").trim(),
+        adults: Math.max(1, toInt(getEl("adults").value, 1)),
+        children: Math.max(0, toInt(getEl("children").value, 0)),
+        infants: Math.max(0, toInt(getEl("infants").value, 0)),
+        nonStop: Boolean(getEl("nonStop").checked),
+      };
+
+      const jwt = await ensureJwt();
 
       const res = await fetch(EDGE_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${jwt}`,
         },
         body: JSON.stringify(payload),
       });
@@ -57,19 +68,22 @@
       try {
         data = JSON.parse(text);
       } catch {
-        throw new Error(`Non-JSON response (${res.status}): ${text.slice(0, 300)}`);
+        throw new Error(`Edge returned non-JSON (${res.status}): ${text.slice(0, 300)}`);
       }
 
       if (!res.ok) {
-        const msg = data?.error ? String(data.error) : `Request failed (${res.status})`;
-        throw new Error(msg);
+        throw new Error(data?.error ? String(data.error) : `Request failed (${res.status})`);
       }
 
-      renderResults(data);
-    } catch (e) {
-      console.error(e);
-      alert(e?.message ? e.message : String(e));
+      safeRender(data);
+    } catch (err) {
+      console.error("searchFlights error:", err);
     }
-  };
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    window.searchFlights = searchFlights;
+  });
 </script>
+
 
